@@ -8,6 +8,7 @@ async function start(){
 
     await page.goto("https://learnwebcode.github.io/practice-requests/")
 
+    // -----------------------------------------------------------------
     // * Web Scraping Names
     const names = await page.evaluate(()=>{
         let nodelist = document.querySelectorAll(".info strong"); //will retrun node list of elements
@@ -16,6 +17,13 @@ async function start(){
 
     await fs.writeFile("./names/names.txt",names.join("\n"));
     
+    // ------------------------------------------------------------------
+    //* Web Scraping content when clicked a button
+    // instead of using getElement by id we can use $eval for selecting first instance 
+    await page.click("#clickme")
+    const clickedData = await page.$eval("#data",el => el.textContent);
+    console.log(clickedData);
+    // ------------------------------------------------------------------
     // * Web Scraping photos
     // instead pf arr.from and all we can select multiple elements by $$eval("css slector",function(array having css seletor elements))
     const photos = await page.$$eval("img", (imgs)=>{
