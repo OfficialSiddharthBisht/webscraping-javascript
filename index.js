@@ -14,6 +14,15 @@ async function start(){
     })
 
     await fs.writeFile("./names/names.txt",names.join("\n"));
+    // instead pf arr.from and all we can select multiple elements by $$eval("css slector",function(array having css seletor elements))
+    const photos = await page.$$eval("img", (imgs)=>{
+        return imgs.map(x => x.src);
+    })
+
+    for(const photo of photos){
+        const imagePage = await page.goto(photo);
+        await fs.writeFile("./images/"+photo.split("/").pop(),await imagePage.buffer());
+    }
     await browser.close();
 }
 
